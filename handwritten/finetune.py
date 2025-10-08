@@ -432,3 +432,26 @@ def evaluate(model, val_dataloader, device, tokenizer, bleu_metric, max_batches=
     return avg_val_loss, avg_bleu
 
 train_losses = train_lora(model, train_dataloader, optimizer, scheduler, device, num_epochs, eval_steps, val_dataloader, tokenizer, bleu_metric, local_rank=ddp_local_rank)
+
+# evaluating on the final test dataset
+best_checkpoint_step = best_checkpoint_step
+checkpoint_dir = f"checkpoints/checkpoint_step_{best_checkpoint_step}"
+best_model = VisionEncoderDecoderModel.from_pretrained(checkpoint_dir).to(device)
+
+best_tokenizer = AutoTokenizer.from_pretrained(checkpoint_dir)
+
+# evaluating on test set
+test_loss, test_bleu_scores = evaluate(best_model, test_dataloader, device, best_tokenizer, bleu_metric, stage='final')
+print(f"Test Loss: {test_loss}")
+print(f"Test BLEU Score: {test_bleu_scores}")
+
+if master_process: 
+    metrics_test = {
+            "test_losses": test_loss,
+            "test_bleu_scores": test_bleu_scores
+        }
+    with open("test_metrics.json", "w") as f:
+        json.dump(metrics_test, f)
+
+dist.barrier()
+dist.destroy_process_group()
