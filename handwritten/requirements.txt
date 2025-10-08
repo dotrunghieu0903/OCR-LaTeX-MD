@@ -1,8 +1,31 @@
+# OCR-LaTeX-MD Requirements
+# 
+# RECOMMENDED: Use conda environment setup instead
+# conda env create -f ../environment.yml
+# conda activate ocr-latex
+#
+# If using pip only, install these packages:
+# Note: Install PyTorch separately with CUDA support first:
+# pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
+
+# Core ML libraries (install via conda for better compatibility)
 datasets==2.20.0
 evaluate==0.4.2
-numpy==1.25.2
-Pillow==10.4.0
-torch==2.3.1
-tqdm==4.66.4
 transformers==4.32.0
 peft==0.11.1
+
+# Utilities
+tqdm==4.66.4
+huggingface-hub
+accelerate
+
+# Optional: Experiment tracking and visualization
+tensorboard
+wandb
+matplotlib
+seaborn
+
+# Note: These should be installed via conda for better performance:
+# numpy==1.25.2      # conda install numpy
+# Pillow==10.4.0     # conda install pillow
+# torch==2.3.1       # conda install pytorch pytorch-cuda=11.8 -c pytorch -c nvidia
