@@ -14,7 +14,6 @@ from transformers import (
 
 from peft import LoraConfig, IA3Config, get_peft_model
 
-from PIL import Image
 import evaluate
 from datasets import load_dataset
 import numpy as np
