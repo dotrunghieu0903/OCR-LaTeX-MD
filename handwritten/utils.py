@@ -275,7 +275,13 @@ def evaluate_model(model, val_dataloader, device, tokenizer, bleu_metric, max_ba
             
             # Decode predictions and references
             pred_texts = tokenizer.batch_decode(generated_ids, skip_special_tokens=True)
-            ref_texts = tokenizer.batch_decode(labels, skip_special_tokens=True)
+            # Filter out -100 values from labels before decoding
+            filtered_labels = []
+            for label_seq in labels:
+                filtered_seq = label_seq[label_seq != -100]
+                filtered_labels.append(filtered_seq)
+            
+            ref_texts = tokenizer.batch_decode(filtered_labels, skip_special_tokens=True)
             
             predictions.extend(pred_texts)
             references.extend(ref_texts)

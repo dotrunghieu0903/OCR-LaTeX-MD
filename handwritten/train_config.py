@@ -17,8 +17,8 @@ class Config:
     
     # training parameters
     num_epochs = 10
-    batch_size_train = 32
-    batch_size_val = 32
+    batch_size_train = 4
+    batch_size_val = 4
     learning_rate = 1e-4
     warmup_steps = 400
     max_grad_norm = 1.0
@@ -33,7 +33,7 @@ class Config:
     eval_steps = 200
 
     # metric parameters
-    bleu = "google_bleu"
+    bleu = f"{checkpoint_dir}/google_bleu.py"
     
     # fine-tuning specific parameters (override defaults when needed)
     # learning_rate = 2e-4  # can be overridden for fine-tuning

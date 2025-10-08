@@ -73,7 +73,7 @@ class LatexDataset(Dataset):
             Dictionary containing pixel_values and labels
         """
         item = self.dataset[idx]
-        latex_sequence = item['text']
+        latex_sequence = item['latex_formula']
         image = item['image']
 
         # Convert RGBA to RGB for some images that have alpha channels

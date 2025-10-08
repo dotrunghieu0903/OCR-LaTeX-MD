@@ -83,6 +83,16 @@ model.decoder.resize_token_embeddings(len(tokenizer))
 
 # Move model to device and compile
 model.to(device)
+
+# Enable memory optimizations
+if 'cuda' in str(device):
+    torch.cuda.empty_cache()
+    # Enable memory efficient attention if available
+    try:
+        torch.backends.cuda.enable_flash_sdp(True)
+    except:
+        pass
+
 torch.compile(model)
 
 # Wrap model with DDP for distributed training
@@ -149,6 +159,9 @@ def train_from_scratch(model, train_dataloader, optimizer, scheduler, device, nu
     step = 0
     train_losses = []
     
+    # Enable memory optimization
+    torch.backends.cudnn.benchmark = True
+    
     for epoch in range(num_epochs):
         if ddp:
             train_dataloader.sampler.set_epoch(epoch)
@@ -161,6 +174,10 @@ def train_from_scratch(model, train_dataloader, optimizer, scheduler, device, nu
             
             optimizer.zero_grad()
             
+            # Clear cache to free up memory
+            if step % 50 == 0:
+                torch.cuda.empty_cache()
+            
             outputs = model(pixel_values=pixel_values, labels=labels)
             loss = outputs.loss
             
@@ -172,9 +189,12 @@ def train_from_scratch(model, train_dataloader, optimizer, scheduler, device, nu
             train_losses.append(loss.item())
             step += 1
             
+            # Clear intermediate tensors
+            del pixel_values, labels, outputs, loss
+            
             # Update progress bar
             if local_rank == 0:
-                epoch_iterator.set_postfix({"loss": loss.item(), "lr": scheduler.get_last_lr()[0]})
+                epoch_iterator.set_postfix({"loss": train_losses[-1], "lr": scheduler.get_last_lr()[0]})
             
             # Evaluate and save checkpoint
             if step % eval_steps == 0:
