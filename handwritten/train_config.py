@@ -34,6 +34,8 @@ class Config:
 
     # metric parameters
     bleu = "google_bleu"
-    learning_rate = 2e-4
-    num_epochs = 40 # increase the number of epochs for fine-tuning
-    eval_steps = 400 # evaluate more frequently during fine-tuning
+    
+    # fine-tuning specific parameters (override defaults when needed)
+    # learning_rate = 2e-4  # can be overridden for fine-tuning
+    # num_epochs = 40       # can be overridden for fine-tuning
+    # eval_steps = 400      # can be overridden for fine-tuning
