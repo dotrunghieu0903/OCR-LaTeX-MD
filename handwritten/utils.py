@@ -275,6 +275,7 @@ def evaluate_model(model, val_dataloader, device, tokenizer, bleu_metric, max_ba
             
             # Decode predictions and references
             pred_texts = tokenizer.batch_decode(generated_ids, skip_special_tokens=True)
+            
             # Filter out -100 values from labels before decoding
             filtered_labels = []
             for label_seq in labels:
@@ -292,8 +293,12 @@ def evaluate_model(model, val_dataloader, device, tokenizer, bleu_metric, max_ba
     
     # Calculate BLEU scores
     try:
-        bleu_scores = bleu_metric.compute(predictions=predictions, references=references)
-    except:
+        # BLEU metric expects references as list of lists
+        formatted_references = [[ref] for ref in references]
+        bleu_scores = bleu_metric.compute(predictions=predictions, references=formatted_references)
+        print(f"BLEU calculation successful: {bleu_scores}")
+    except Exception as e:
+        print(f"BLEU calculation failed: {e}")
         bleu_scores = {"bleu": 0.0}
     
     model.train()

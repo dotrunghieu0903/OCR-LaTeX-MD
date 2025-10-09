@@ -210,12 +210,12 @@ def train_from_scratch(model, train_dataloader, optimizer, scheduler, device, nu
                     metrics = {
                         "train_loss": np.mean(train_losses[-eval_steps:]),
                         "val_loss": val_loss,
-                        "val_bleu": val_bleu_scores.get("bleu", 0.0)
+                        "val_bleu": val_bleu_scores.get("google_bleu", 0.0)
                     }
                     log_metrics(metrics, step, "validation")
                     
                     # Save checkpoint if best model
-                    current_bleu = val_bleu_scores.get("bleu", 0.0)
+                    current_bleu = val_bleu_scores.get("google_bleu", 0.0)
                     if current_bleu > best_val_bleu:
                         best_val_bleu = current_bleu
                         best_checkpoint_step = step
