@@ -2,6 +2,8 @@
 
 A Vision Encoder-Decoder model for converting mathematical formula images to LaTeX code. This project implements a state-of-the-art OCR system specifically designed for handwritten and printed mathematical formulas.
 
+![Overview](architecture.png)
+
 ## 🚀 Features
 
 - **High Accuracy**: Achieves 66.6% BLEU score on test datasets
@@ -20,14 +22,14 @@ A Vision Encoder-Decoder model for converting mathematical formula images to LaT
 ## 📋 Prerequisites
 
 ### Hardware Requirements
-- **GPU**: CUDA-compatible GPU (recommended: RTX 3080+ or V100+)
+- **GPU**: CUDA-compatible GPU (recommended: RTX 3090+ or V100+)
 - **RAM**: 16GB+ system RAM
-- **VRAM**: 8GB+ GPU memory for training
+- **VRAM**: 24GB+ GPU memory for training
 - **Storage**: 50GB+ free space for datasets and checkpoints
 
 ### Software Requirements
-- Python 3.8+
-- CUDA 11.0+ (for GPU support)
+- Python 3.10+
+- CUDA 11.8+ (for GPU support)
 - Anaconda or Miniconda
 
 ## 🔧 Installation & Setup
